@@ -1,0 +1,25 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div style="text-align:center">
+  <h1>
+    Sistema Experto
+  </h1>
+
+
+<mat-accordion>
+  <mat-expansion-panel  *ngFor="let question of questions; index as i">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{i}}. {{question.value}}
+      </mat-panel-title>
+      <mat-panel-description>
+        ayuda: {{question.tooltip}}
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-radio-group>
+        <mat-radio-button  *ngFor="let answer of question.answers; index as j" [value]="answer">
+          {{j}}. {{answer}}
+        </mat-radio-button>
+    </mat-radio-group>
+  </mat-expansion-panel>
+</mat-accordion>
