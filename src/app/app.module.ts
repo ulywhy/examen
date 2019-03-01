@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatRadioModule} from '@angular/material/radio';
+import {MatListModule} from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,7 @@ import {MatRadioModule} from '@angular/material/radio';
   ],
   imports: [
     BrowserModule, MatExpansionModule, BrowserAnimationsModule,
-    MatRadioModule
+    MatRadioModule, MatListModule
   ],
   providers: [],
   bootstrap: [AppComponent]
