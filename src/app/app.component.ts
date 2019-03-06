@@ -1,6 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms'
 import { KnowledgeDBService } from './knowledge-db.service';
+import { AuthenticationService } from './authentication.service';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import { MatHorizontalStepper, MatStep } from '@angular/material';
 import {
 Stitch,
 RemoteMongoClient,
@@ -21,16 +27,34 @@ AnonymousCredential
 })
 export class AppComponent {
 
+  @ViewChild(MatHorizontalStepper) stepper: MatHorizontalStepper;
+
   expandedQuestion:any;
   questions: [];
+  userAccountFormControl = new FormControl('', [
+    Validators.required,
+    Validators.pattern('[1-9][0-9]{6,6}')
+  ]);
   headerColumns = ["questionTitle"];
-  constructor(private knowledgeDB : KnowledgeDBService){
+  isLinear = false;
+
+
+  constructor(private knowledgeDB : KnowledgeDBService,
+              private authenticationService : AuthenticationService)
+  {}
+
+  ngOnInit() {
+    this.questions = this.knowledgeDB.getRandomQuestions();
   }
 
-  ngOnInit(){
-    console.log("retieving questions");
-    this.questions = this.knowledgeDB.getRandomQuestions();
-    console.log(this.questions )
+  authenticate(){
+    console.log(this.stepper)
+    console.log(this.userAccountFormControl.value)
+    if(this.authenticationService.authenticate(this.userAccountFormControl.value)){
+        this.stepper.next()
+    }else{
+      console.log(this.userAccountFormControl.value);
+    }
   }
     /*
     this.client.auth.loginWithCredential(new AnonymousCredential()).then(user =>
