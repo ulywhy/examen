@@ -1,0 +1,54 @@
+<table mat-table background="primary"
+       [dataSource]="questions" multiTemplateDataRows
+       class="mat-elevation-z8">
+
+  <ng-container matColumnDef="questionTitle" *ngFor="let column of headerColumns">
+    <td mat-cell  [class.success]=" finished && question.correct"
+                  [class.failed]="finished && !question.correct"
+                  *matCellDef="let question; let i = dataIndex">
+      {{i + 1}}-{{question.value}}
+      <button mat-icon-button color="accent" aria-label="{question.tooltip}"
+              matTooltip="{{question.tooltip}}"
+              [matTooltipPosition]="'after'">
+        <mat-icon>help</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+  <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+  <ng-container matColumnDef="expandedDetail">
+    <td mat-cell *matCellDef="let question; let i = dataIndex " [attr.colspan]="headerColumns.length">
+      <div class="example-element-detail"
+           [@detailExpand]="expandWho(question)">
+
+
+        <table mat-table [dataSource]="question.answers" class="mat-elevation-z8">
+
+          <ng-container matColumnDef="answerTitle">
+            <td mat-cell *matCellDef="let answer; let j = index">
+                <mat-radio-button
+                  [checked]="question.selected === j"
+                  [disabled]="finished"
+                  [class.selected]="finished && !question.correct && answer.correct"
+                  [name]="i" (change)="evaluate(question, j, i);">
+                  {{j+1}}.{{answer.value}}
+                </mat-radio-button>
+            </td>
+          </ng-container>
+
+          <tr mat-row *matRowDef="let row; columns: ['answerTitle'];"></tr>
+        </table>
+
+
+      </div>
+    </td>
+  </ng-container>
+
+  <tr mat-row [style.fontSize.px]="16" class="element-row"
+      [class.active]="question === expandedQuestion"
+      *matRowDef="let question; let i = index; columns: headerColumns;"
+      (click)="nextQuestion(question, j);">
+  </tr>
+  <tr mat-row color="primary"
+      *matRowDef="let row; columns: ['expandedDetail']"
+      class="detail-row"></tr>
+</table>

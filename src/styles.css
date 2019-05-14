@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
 /* You can add global styles to this file, and also import other style files */
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "~@angular/material/prebuilt-themes/pink-bluegrey.css";
 
 @keyframes lds-dual-ring {
   0% {
@@ -17,4 +17,16 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 div.mat-radio-label-content{
   white-space: normal;
+}
+
+.success {
+  background: green;
+}
+
+.selected{
+  background : #2A52C1;
+}
+
+.failed {
+  background: red;
 }
