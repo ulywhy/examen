@@ -1,17 +1,17 @@
-<div class="example-container" [class.example-is-mobile]="mobileQuery.matches">
-  <mat-toolbar color="primary" class="example-toolbar">
-    <span fxFlex></span>
+<div fxLayout="column" class="example-container" fxFlexFill>
+  <mat-toolbar color="primary"class="example-toolbar">
     <span class="mat-title">Sistema Experto</span>
     <span fxFlex></span>
+    <span fxFlex class="mat-caption">{{userName}}</span>
   </mat-toolbar>
 
-  <mat-sidenav-container class="example-sidenav-container"
-                         [style.marginTop.px]="56">
 
-    <mat-sidenav-content fxLayout="column" fxLayoutAlign="center center">
+  <mat-sidenav-container class="example-sidenav-container">
 
-    <mat-horizontal-stepper [linear]="isLinear" #stepper>
-      <mat-step [stepControl]="userAccountFormControl">
+    <mat-sidenav-content fxFlex="auto" fxLayout="column" fxLayoutAlign="center center">
+
+    <mat-horizontal-stepper [linear]="true" #stepper fxFlexFill>
+      <mat-step [stepControl]="userAccountFormControl" fxFlex="grow" [editable]="false">
         <mat-form-field  fxFlexAlign="end">
           <input color="accent" matInput type="number" (keydown)="keyDownFunction($event)"
                  [formControl]="userAccountFormControl" placeholder="cuenta"
@@ -32,7 +32,7 @@
       </mat-step>
 
 
-      <mat-step [stepControl]="userAccountFormControl">
+      <mat-step [stepControl]="userAccountFormControl" fxFlexFill>
         <table mat-table background="primary"
                [dataSource]="questions" multiTemplateDataRows
                class="mat-elevation-z8">
@@ -43,10 +43,13 @@
                           *matCellDef="let question; let i = dataIndex">
               {{i + 1}}-{{question.value}}
               <button mat-icon-button color="accent" aria-label="{question.tooltip}"
-                      matTooltip="{{question.tooltip}}"
-                      [matTooltipPosition]="'after'">
+                      matTooltip="{{question.tooltip}}" (click)="tooltip.toggle()"
+                      [matTooltipPosition]="'after'" #tooltip="matTooltip">
                 <mat-icon>help</mat-icon>
               </button>
+            </td>
+            <td mat-footer-cell *matFooterCellDef>
+              <button mat-raised-button [disabled]="!allAnswered" (click)="finish()">{{buttonName}}</button>
             </td>
           </ng-container>
           <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
@@ -72,10 +75,9 @@
 
                   <tr mat-row *matRowDef="let row; columns: ['answerTitle'];"></tr>
                 </table>
-
-
               </div>
             </td>
+
           </ng-container>
 
           <tr mat-row [style.fontSize.px]="16" class="element-row"
@@ -86,22 +88,23 @@
           <tr mat-row color="primary"
               *matRowDef="let row; columns: ['expandedDetail']"
               class="detail-row"></tr>
+          <tr mat-footer-row *matFooterRowDef="headerColumns; sticky: true"></tr>
         </table>
       </mat-step>
 
-      
+
     </mat-horizontal-stepper>
 
 
     </mat-sidenav-content>
   </mat-sidenav-container>
-  <mat-toolbar *ngIf="finished" color="warn" class="example-toolbar" fxFlexAlign="end">
+
+  <mat-toolbar *ngIf="finished" color="accent" class="example-toolbar" fxFlexAlign="end">
     <span fxFlex></span>
     <span  class="mat-title" background-color="warn">
       Total: {{total}}/{{numberOfQuestions}}
     </span>
     <span fxFlex></span>
-    <button [disabled]="!allAnswered" mat-raised-button color="primary" (click)="finish()">{{buttonName}}</button>
-    <span fxFlex></span>
   </mat-toolbar>
+
 </div>

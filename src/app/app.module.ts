@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
-import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 
@@ -24,14 +23,10 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 //navbar sticky
 import {MatSidenavModule} from '@angular/material/sidenav';
 
-import { LoginComponent } from './login/login.component';
-import { TestComponent } from './test/test.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
-    TestComponent
   ],
   imports: [
     CommonModule, ReactiveFormsModule, MatInputModule,
@@ -39,7 +34,7 @@ import { TestComponent } from './test/test.component';
     MatStepperModule, MatFormFieldModule, MatStepperModule,
     MatToolbarModule, MatButtonModule, MatSidenavModule,
     MatTooltipModule, MatIconModule, FlexLayoutModule,
-    MatRadioModule, MatListModule, ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }), AppRoutingModule
+    MatRadioModule, MatListModule, ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]

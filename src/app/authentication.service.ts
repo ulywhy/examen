@@ -16,12 +16,15 @@ export class AuthenticationService {
 
   authenticate(userAccount:number):any{
 
+
     return this.dbConnector.getDB().collection('users').find({"user":userAccount}, {"limit" : 1})
     .first()
     .then(doc => {
+      console.log(doc)
       return doc
     }).catch(err => {
-      return err
+      console.log(err)
+      return null
     });
   }
 }

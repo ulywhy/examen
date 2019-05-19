@@ -22,23 +22,30 @@ import {ChangeDetectorRef, OnDestroy} from '@angular/core';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0', display: 'none'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class AppComponent  implements OnDestroy {
   //navbar attributes
   mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
 
+  @ViewChild('stepper') stepper: MatHorizontalStepper;
+
   buttonName:string = 'Evaluar';
   finished:boolean = false;
   expandedQuestion:any;
   questions: any;
-  userAccountFormControl = new FormControl('', [
-    Validators.required,
-    Validators.pattern('[1-9][0-9]{6,6}')
-  ]);
+  userAccountFormControl : FormControl;
   headerColumns = ["questionTitle"];
   currentUser : any;
+  userName: string = "";
   total:number = 0;
   allAnswered:boolean = false;
   numberOfQuestions : number = 20;
@@ -52,6 +59,11 @@ export class AppComponent  implements OnDestroy {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
+
+    this.userAccountFormControl = new FormControl('', [
+      Validators.pattern('[1-9][0-9]{6,6}'),
+      Validators.required
+    ]);
   }
 
   ngOnDestroy(): void {
@@ -62,14 +74,17 @@ export class AppComponent  implements OnDestroy {
     .then(data => {
       this.questions = data
       this.expandedQuestion = this.questions[0];
+      console.log(this.questions)
     });
   }
 
   authenticate(){
+    console.log(this.userAccountFormControl)
     this.currentUser = this.userAccountFormControl.value;
-
+    console.log(this.currentUser)
     this.authenticationService.authenticate(this.currentUser).then(result =>{
       if(result.user === this.currentUser) {
+        this.userName = result.name;
         console.log(result)
         if(result.questions){
           this.buttonName = "Cerrar"
@@ -77,10 +92,10 @@ export class AppComponent  implements OnDestroy {
           this.finished = true;
           this.allAnswered = true;
           this.questions = result.questions;
-          //stepper next
         }else{
           this.getQuestions();
         }
+        this.stepper.next();
       }
       else{
         this.userAccountFormControl.setErrors({'incorrect': true});
@@ -118,13 +133,13 @@ export class AppComponent  implements OnDestroy {
     }else{
       this.questions.forEach(question => this.total += question.correct ? 1 : 0)
       window.scroll(0,0);
+      this.finished = true;
+      this.buttonName = 'Finalizar'
     }
-    this.finished = true;
-    this.buttonName = 'Finalizar'
   }
 
   keyDownFunction(event){
-    if(event.keyCode == 13) {
+    if(event.keyCode == 13 && this.userAccountFormControl) {
       this.authenticate();
     }
   }
