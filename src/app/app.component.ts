@@ -107,7 +107,7 @@ export class AppComponent  implements OnDestroy {
     question.selected = answerIndex;
     question.correct = question.answers[answerIndex].correct;
     this.allAnswered = this.questions.find(question => question.selected === undefined) === undefined;
-    this.delay(200).then(any => {
+    this.delay(250).then(any => {
       this.nextQuestion(question, questionIndex)
     });
   }
@@ -118,20 +118,21 @@ export class AppComponent  implements OnDestroy {
   }
 
   expandWho(question:any){
-    return this.finished ? 'expanded' : question == this.expandedQuestion ? 'expanded' : 'collapsed'
+    return this.finished ? 'expanded' : question == this.expandedQuestion ? 'expanded' : 'collapsed';    
   }
 
   finish(){
     if(this.finished){
+      window.location.reload();
+    }else{
+      this.questions.forEach(question => this.total += question.correct ? 1 : 0)
       this.knowledgeDB.saveResult(this.currentUser, this.questions, this.total)
       .then(doc => {
-        window.location.reload();
+        console.log(doc)
       }).catch(err => {
         console.error(err)
         return err
       })
-    }else{
-      this.questions.forEach(question => this.total += question.correct ? 1 : 0)
       window.scroll(0,0);
       this.finished = true;
       this.buttonName = 'Finalizar'

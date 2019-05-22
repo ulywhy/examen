@@ -12,6 +12,7 @@
 
     <mat-horizontal-stepper [linear]="true" #stepper fxFlexFill>
       <mat-step [stepControl]="userAccountFormControl" fxFlex="grow" [editable]="false">
+        <ng-template matStepLabel>ingresar</ng-template>
         <mat-form-field  fxFlexAlign="end">
           <input color="accent" matInput type="number" (keydown)="keyDownFunction($event)"
                  [formControl]="userAccountFormControl" placeholder="cuenta"
@@ -33,6 +34,7 @@
 
 
       <mat-step [stepControl]="userAccountFormControl" fxFlexFill>
+        <ng-template matStepLabel>Evaluación</ng-template>
         <table mat-table background="primary"
                [dataSource]="questions" multiTemplateDataRows
                class="mat-elevation-z8">
